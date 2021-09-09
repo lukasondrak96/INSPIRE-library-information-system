@@ -1,10 +1,10 @@
-package com.inspire.inspirelibraryinformationsystem;
+package com.test.libraryinformationsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class InspireLibraryInformationSystemApplicationTests {
+class LibraryInformationSystemApplicationTests {
 
     @Test
     void contextLoads() {

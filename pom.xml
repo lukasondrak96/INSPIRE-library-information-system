@@ -8,11 +8,11 @@
         <version>2.5.4</version>
         <relativePath/>
     </parent>
-    <groupId>com.inspire</groupId>
-    <artifactId>INSPIRE-library-information-system</artifactId>
+    <groupId>com.test</groupId>
+    <artifactId>library-information-system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>INSPIRE-library-information-system</name>
-    <description>INSPIRE-library-information-system</description>
+    <name>library-information-system</name>
+    <description>library-information-system</description>
     <properties>
         <java.version>11</java.version>
     </properties>
