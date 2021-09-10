@@ -8,6 +8,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +22,13 @@ import java.util.List;
 public class Loan {
 
     @Id
+    @Setter(AccessLevel.PRIVATE)
     @SequenceGenerator(name = "LoanIdGenerator", sequenceName = "LOAN_SEQUENCE", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LoanIdGenerator")
     private Long idLoan;
 
     @Enumerated(EnumType.STRING)
+    @Size(max = 255, message = "Příliš dlouhý vstup")
     private LoanState state;
 
     @ManyToOne(fetch = FetchType.EAGER)
