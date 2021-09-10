@@ -1,4 +1,4 @@
-package com.test.libraryinformationsystem;
+package com.lukasondrak.libraryinformationsystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
