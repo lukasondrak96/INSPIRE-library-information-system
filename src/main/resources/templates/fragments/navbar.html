@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<body>
+<nav class="navbar navbar-expand-sm navbar-ct-azure" th:fragment="navbar">
+  <div class="container-fluid">
+    <div class="navbar-collapse justify-content-end" id="navigation">
+      <ul class="navbar-nav navbar-ct-azure">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/loans}">
+            <span class="d-sm-block">&nbsp;Vypůjčky</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/clients}" class="nav-link">
+            <span class="d-sm-block">&nbsp;Uživatelé</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/items}">
+            <span class="d-sm-block">&nbsp;Položky knihovny</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/authors}">
+            <span class="d-sm-block">&nbsp;Autoři položek</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</body>
+</html>
