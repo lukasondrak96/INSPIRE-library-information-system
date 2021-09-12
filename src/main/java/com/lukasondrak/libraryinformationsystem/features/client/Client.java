@@ -23,7 +23,7 @@ public class Client implements Serializable {
 
     @Id
     @Setter(AccessLevel.PRIVATE)
-    @SequenceGenerator(name = "ClientIdGenerator", sequenceName = "CLIENT_SEQUENCE", allocationSize = 1)
+    @SequenceGenerator(name = "ClientIdGenerator", sequenceName = "CLIENT_SEQUENCE", allocationSize = 1, initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ClientIdGenerator")
     private Long idClient;
 

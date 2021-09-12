@@ -23,7 +23,7 @@ public class Item implements Serializable {
 
     @Id
     @Setter(AccessLevel.PRIVATE)
-    @SequenceGenerator(name = "ItemIdGenerator", sequenceName = "ITEM_SEQUENCE", allocationSize = 1)
+    @SequenceGenerator(name = "ItemIdGenerator", sequenceName = "ITEM_SEQUENCE", allocationSize = 1, initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ItemIdGenerator")
     private Long idItem;
 

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Autoři</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <h3>Přidání nového autora</h3>
+
+    <div class="card result-card" th:if="${result}">
+        <div class="card-body" th:text="${result}">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="new-author-form"
+                          th:action="@{/authors/new}"
+                          th:object="${author}" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Jméno autora</label>
+                                    <input class="form-control" type="text" th:field="*{name}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Příjmení autora</label>
+                                    <input class="form-control" type="text" th:field="*{surname}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit">Vytvořit autora</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

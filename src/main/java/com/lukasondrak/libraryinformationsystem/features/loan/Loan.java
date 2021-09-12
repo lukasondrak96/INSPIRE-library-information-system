@@ -23,7 +23,7 @@ public class Loan {
 
     @Id
     @Setter(AccessLevel.PRIVATE)
-    @SequenceGenerator(name = "LoanIdGenerator", sequenceName = "LOAN_SEQUENCE", allocationSize = 1)
+    @SequenceGenerator(name = "LoanIdGenerator", sequenceName = "LOAN_SEQUENCE", allocationSize = 1, initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LoanIdGenerator")
     private Long idLoan;
 

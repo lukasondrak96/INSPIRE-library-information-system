@@ -19,7 +19,7 @@ public class LoanOfItem {
 
     @Id
     @Setter(AccessLevel.PRIVATE)
-    @SequenceGenerator(name = "LoanOfItemIdGenerator", sequenceName = "LOAN_OF_ITEM_SEQUENCE", allocationSize = 1)
+    @SequenceGenerator(name = "LoanOfItemIdGenerator", sequenceName = "LOAN_OF_ITEM_SEQUENCE", allocationSize = 1, initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "LoanOfItemIdGenerator")
     private Long idLoanOfItem;
 

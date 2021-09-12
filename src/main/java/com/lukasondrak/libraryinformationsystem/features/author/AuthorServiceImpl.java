@@ -16,16 +16,26 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public Optional<Author> findById(long authorId) {
-        return authorRepository.findById(authorId);
+    public AuthorInfoWithoutItemsDto getAuthorInfoById(long authorId) {
+        Optional<Author> authorNullable = authorRepository.findById(authorId);
+        if(authorNullable.isPresent()) {
+            Author foundedAuthor = authorNullable.get();
+            return new AuthorInfoWithoutItemsDto(authorId, foundedAuthor.getName(), foundedAuthor.getSurname());
+        }
+        return null;
     }
 
     @Override
-    public List<AuthorInfoWithoutItemsDto> getAllAuthors() {
+    public List<AuthorInfoWithoutItemsDto> getAllAuthorsInfo() {
         return authorRepository.findAll()
                 .stream()
                 .map(author -> new AuthorInfoWithoutItemsDto(author.getIdAuthor(), author.getName(), author.getSurname()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<AuthorInfoWithoutItemsDto> getAuthorInfoByNameAndSurname(String name, String surname) {
+        return authorRepository.findByNameAndSurname(name, surname);
     }
 
     @Override

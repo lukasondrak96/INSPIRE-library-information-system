@@ -4,3 +4,68 @@
     width:100%;
     height:40px;
 }
+
+.navbar {
+    width:100%;
+    background-color: #cedef0;
+}
+
+.nav-link:hover {
+    font-weight: bold;
+}
+
+
+.main-panel>.content {
+    padding: 40px 30px;
+}
+
+.card-header {
+    font-weight: bold;
+}
+
+.authors-grid-container {
+    display: grid;
+    grid-template-rows: auto;
+    grid-column-gap: 15px;
+    padding: 5px 10px;
+    margin: 5px;
+    grid-template-columns: 60px minmax(100px, 7fr) minmax(100px, 7fr) 120px;
+    grid-template-areas: 'author-id-area author-name-area author-surname-area author-delete-area';
+}
+
+.authors-grid-container-new {
+    display: grid;
+    grid-template-rows: auto;
+    grid-column-gap: 15px;
+    padding: 8px 10px;
+    margin: 10px;
+    grid-template-columns: minmax(120px, 7fr) minmax(120px, 7fr);
+    grid-template-areas: 'author-name-area author-surname-area';
+}
+
+
+.grid-cell {
+    align-self: center;
+}
+
+
+a, a:link {
+    background-color: #cedef0;
+    text-decoration: none;
+    padding: 13px 30px;
+    width: inherit;
+    text-align: center;
+    display: inline-block;
+}
+
+.btn-add {
+    margin: 20px 0;
+}
+
+.result-card {
+    margin-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}

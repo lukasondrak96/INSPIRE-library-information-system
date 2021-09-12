@@ -20,7 +20,7 @@ public class Author implements Serializable {
 
     @Id
     @Setter(AccessLevel.PRIVATE)
-    @SequenceGenerator(name = "AuthorIdGenerator", sequenceName = "AUTHOR_SEQUENCE", allocationSize = 1)
+    @SequenceGenerator(name = "AuthorIdGenerator", sequenceName = "AUTHOR_SEQUENCE", allocationSize = 1, initialValue = 100)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AuthorIdGenerator")
     private Long idAuthor;
 
@@ -32,7 +32,11 @@ public class Author implements Serializable {
     @Size(max = 255, message = "Příliš dlouhý vstup")
     private String surname;
 
-    @ManyToMany(mappedBy = "itemAuthors", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "itemAuthors", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Item> authorItems = new ArrayList<>();
 
+    public Author(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
 }

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Autoři</title>
+
+  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div layout:fragment="page-content">
+  <h3>Autoři</h3>
+
+  <div class="btn-add">
+    <a th:href="@{'/authors/new/'}">Přidat nového autora</a>
+  </div>
+
+  <div class="card result-card" th:if="${result}">
+    <div class="card-body" th:text="${result}">
+    </div>
+  </div>
+
+  <div class="row" th:if="${authors.empty}">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          Žádný autor nebyl nalezen.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" th:unless="${authors.empty}">
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-header authors-grid-container table-responsive scroll-tgr">
+          <div class="grid-cell author-id-area">
+            <span class="text-bold"></span>
+          </div>
+          <div class="grid-cell author-name-area">
+            <span class="text-bold">Jméno</span>
+          </div>
+          <div class="grid-cell author-surname-area">
+            <span class="text-bold">Příjmení</span>
+          </div>
+          <div class="grid-cell author-delete-area">
+            <span class="text-bold"></span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="grid-stripped authors-grid-container table-responsive scroll-tgr same-height"
+               th:each="author, index : ${authors}">
+            <div class="grid-cell author-id-area">
+              <span class="header-text pull-left" th:text="${index.count}"></span>
+            </div>
+
+            <div class="grid-cell author-name-area">
+              <span class="header-text pull-left" th:text="${author.name}"></span>
+            </div>
+            <div class="grid-cell author-surname-area">
+              <span th:text="${author.surname}"></span>
+            </div>
+            <div class="grid-cell author-delete-area">
+            <form th:action="@{/authors/delete}" th:object="${author}" th:method="delete">
+              <input type="hidden" name="idAuthor" th:value="${author.idAuthor}">
+              <input type="hidden" name="name" th:value="${author.name}">
+              <input type="hidden" name="surname" th:value="${author.surname}">
+              <button type="submit">Smazat autora</button>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
