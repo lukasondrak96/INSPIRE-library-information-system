@@ -27,9 +27,6 @@ public class LoanOfItem {
     @Size(max = 255, message = "Příliš dlouhý vstup")
     private LoanState state;
 
-    @NotNull(message = "Chybějící čas začátku vypůjčky")
-    private LocalDate startDate;
-
     @NotNull(message = "Chybějící čas konce vypůjčky")
     private LocalDate endDate;
 
