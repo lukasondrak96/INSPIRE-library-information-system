@@ -13,20 +13,18 @@
 
 </head>
 <body>
-<div>
-    <div class="main-panel" id="main-panel">
-        <nav th:replace="fragments/navbar :: navbar">
-        </nav>
-        <div class="content">
-            <div class="container-fluid">
-                <div class="navbar-translate" layout:fragment="page-content">
-                </div>
+<div class="main-panel" id="main-panel">
+    <nav th:replace="fragments/navbar :: navbar">
+    </nav>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="navbar-translate" layout:fragment="page-content">
             </div>
         </div>
-        <footer th:replace="fragments/footer :: footer">
-        </footer>
     </div>
 </div>
+<footer th:replace="fragments/footer :: footer">
+</footer>
 </body>
 
 <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>

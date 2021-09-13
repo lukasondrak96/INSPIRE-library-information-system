@@ -35,7 +35,7 @@ public class AuthorController {
         return "pages/author/newAuthor";
     }
 
-    @DeleteMapping("/authors/{id}")
+    @DeleteMapping("/author/{id}")
     public String deleteAuthor(@PathVariable long id, HttpSession session) {
         return authorService.deleteAuthor(id, session);
     }

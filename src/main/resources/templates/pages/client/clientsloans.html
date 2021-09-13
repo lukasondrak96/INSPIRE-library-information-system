@@ -5,14 +5,16 @@
       layout:decorate="~{layouts/mainLayout}">
 <head>
     <meta charset="UTF-8"/>
-    <title>Uživatelé</title>
+    <title>Výpůjčky uživatele</title>
 
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
 </head>
 <body>
 <div layout:fragment="page-content">
     <h3 th:unless="${client == null}"
-        th:text="'Vypůjčky uživatele ' + ${client.name} + ' ' + ${client.surname}"></h3>
+        th:text="'Výpůjčky uživatele ' + ${client.name} + ' ' + ${client.surname}"></h3>
+    <div class="count-of-loans" th:text="'Počet výpůjček: ' + ${#lists.size(client.clientLoans)}">
+    </div>
 
     <div class="card result-card" th:if="${result}">
         <div class="card-body" th:text="${result}">
@@ -30,77 +32,85 @@
     </div>
 
     <div class="row" th:unless="${client.clientLoans.empty}">
-        <div class="col-md-7">
+        <div class="col-md-auto">
             <div class="card"
                  th:each="clientLoan : ${client.clientLoans}">
                 <div class="card-body">
-                    <div th:text="'Vypůjčka ze dne ' + ${clientLoan.dateToString(clientLoan.startDate)}">
+                    <div th:text="'Výpůjčka ze dne ' + ${clientLoan.dateToEuropeanTimeFormat(clientLoan.startDate)}">
                     </div>
-                    <div th:text="'Stav vypůjčky: ' + ${clientLoan.translateState(clientLoan.state)}">
+                    <div th:text="'Počet položek: ' + ${#lists.size(clientLoan.itemsOfLoan)}">
                     </div>
-                    <form th:unless="${clientLoan.state ==
-                        T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).RETURNED_IN_DUE_TIME}"
-                            th:action="@{'/clients/' + ${client.getIdClient()} + '/loan/' + ${clientLoan.getIdLoan()} + '/return'}"
-                          th:method="post">
+                    <div class="loan-state"
+                         th:text="'Stav výpůjčky: ' + ${clientLoan.translateState(clientLoan.state)}">
+                    </div>
+                    <form class="btn-return"
+                          th:if="${clientLoan.state ==
+                        T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).NOT_YET_RETURNED}"
+                          th:action="@{'/clients/' + ${client.idClient} + '/loan/' + ${clientLoan.idLoan} + '/return'}"
+                          th:method="get">
                         <button type="submit">Vrátit všechny položky</button>
                     </form>
 
                     <div class="card">
                         <div class="row">
-                            <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-header grid-container loan-items-grid-container table-responsive scroll-tgr">
-                                        <div class="grid-cell loan-items-title-area">
-                                            <span class="text-bold">Název</span>
-                                        </div>
-                                        <div class="grid-cell loan-items-year-area">
-                                            <span class="text-bold">Rok vydání</span>
-                                        </div>
-                                        <div class="grid-cell loan-items-end-date-area">
-                                            <span class="text-bold">Vrátit do</span>
-                                        </div>
-                                        <div class="grid-cell loan-items-return-area">
-                                            <span class="text-bold"></span>
-                                        </div>
+                            <div class="card">
+                                <div class="card-header grid-container loan-items-grid-container table-responsive scroll-tgr">
+                                    <div class="grid-cell loan-items-title-area">
+                                        <span class="text-bold">Název</span>
                                     </div>
+                                    <div class="grid-cell loan-items-year-area">
+                                        <span class="text-bold">Rok vydání</span>
+                                    </div>
+                                    <div class="grid-cell loan-items-end-date-area">
+                                        <span class="text-bold">Vrátit do</span>
+                                    </div>
+                                    <div class="grid-cell loan-items-return-area">
+                                        <span class="text-bold"></span>
+                                    </div>
+                                    <div class="grid-cell loan-items-extend-area">
+                                        <span class="text-bold"></span>
+                                    </div>
+                                </div>
 
-                                    <div class="card-body" th:each="loan : ${clientLoan.itemsOfLoan}">
-                                        <div th:text="${loan.item.getTitle()}"></div>
-<!--                                        <div class="grid-stripped grid-container loan-items-grid-container table-responsive scroll-tgr same-height"-->
-<!--                                             th:each="client, index : ${clients}">-->
-<!--                                            <div class="grid-cell client-id-area">-->
-<!--                                                <span class="header-text pull-left" th:text="${index.count}"></span>-->
-<!--                                            </div>-->
+                                <div class="card-body" th:each="itemOfLoan : ${clientLoan.itemsOfLoan}">
+                                    <div class="grid-stripped grid-container loan-items-grid-container table-responsive scroll-tgr same-height">
 
-<!--                                            <div class="grid-cell client-name-area">-->
-<!--                                                <span class="header-text pull-left" th:text="${client.name}"></span>-->
-<!--                                            </div>-->
+                                        <div class="grid-cell loan-items-title-area">
+                                            <span class="header-text pull-left"
+                                                  th:text="${itemOfLoan.item.title}"></span>
+                                        </div>
 
-<!--                                            <div class="grid-cell client-surname-area">-->
-<!--                                                <span th:text="${client.surname}"></span>-->
-<!--                                            </div>-->
+                                        <div class="grid-cell loan-items-year-area">
+                                            <span th:text="${itemOfLoan.item.yearOfPublication}"></span>
+                                        </div>
 
-<!--                                            <div class="grid-cell client-email-area">-->
-<!--                                                <span th:text="${client.email}"></span>-->
-<!--                                            </div>-->
+                                        <div class="grid-cell loan-items-end-date-area">
+                                            <span th:text="${clientLoan.dateToEuropeanTimeFormat(itemOfLoan.endDate)}"></span>
+                                        </div>
 
-<!--                                            <div class="grid-cell client-loans-area">-->
-<!--                                                <form th:action="@{'/clients/' + ${client.getId} + '/loans/'}" th:method="get">-->
-<!--                                                    <button type="submit">Zobrazit vypůjčky</button>-->
-<!--                                                </form>-->
-<!--                                            </div>-->
+                                        <div class="grid-cell loan-items-return-area"
+                                             th:if="${itemOfLoan.state == T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).NOT_YET_RETURNED}">
+                                            <form th:action="@{/client/{idClient}/loan/{idLoan}/item/{idItem}/return(idClient=${client.idClient},idLoan=${clientLoan.idLoan},idItem=${itemOfLoan.item.idItem})}"
+                                                  th:method="get">
+                                                <button type="submit">Vrátit</button>
+                                            </form>
+                                        </div>
 
-<!--                                            <div class="grid-cell client-delete-area">-->
-<!--                                                <form th:action="@{'/clients/' + ${client.getId}}" th:method="delete">-->
-<!--                                                    <button type="submit">Smazat uživatele</button>-->
-<!--                                                </form>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
+                                        <div class="grid-cell loan-items-extend-area"
+                                             th:if="${itemOfLoan.state == T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).NOT_YET_RETURNED}">
+                                            <form th:action="@{/client/{idClient}/loan/{idLoan}/item/{idItem}/extend(idClient=${client.idClient},idLoan=${clientLoan.idLoan},idItem=${itemOfLoan.item.idItem})}"
+                                                  th:method="get">
+                                                <button type="submit">Prodloužit o 2 týdny</button>
+                                            </form>
+                                        </div>
+                                        <div class="grid-cell loan-items-return-area"
+                                             th:unless="${itemOfLoan.state == T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).NOT_YET_RETURNED}">
+                                            <span>Již vráceno</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-<!--                        -->
                     </div>
 
                 </div>

@@ -64,7 +64,7 @@
               <span th:text="${author.surname}"></span>
             </div>
             <div class="grid-cell author-delete-area">
-              <form th:action="@{'/authors/' + ${author.getId}}" th:method="delete">
+              <form th:action="@{'/author/' + ${author.getId}}" th:method="delete">
                 <button type="submit">Smazat autora</button>
               </form>
             </div>

@@ -36,12 +36,12 @@ public class ClientController {
         return "pages/client/newClient";
     }
 
-    @GetMapping("/clients/{id}/loans")
+    @GetMapping("/client/{id}/loans")
     public String clientsLoansPage(@PathVariable long id, Model model, HttpSession session) {
         model.addAttribute("result",session.getAttribute("result"));
         Optional<Client> clientToOverviewOptional = clientService.findById(id);
         if(clientToOverviewOptional.isEmpty()) {
-            session.setAttribute("result", "Nepodařilo se zobrazit vypůjčky klienta. Klient se nenachází v databázi.");
+            session.setAttribute("result", "Nepodařilo se zobrazit výpůjčky klienta. Klient se nenachází v databázi.");
             return "redirect:/clients";
         }
 
@@ -50,7 +50,7 @@ public class ClientController {
         return "pages/client/clientsloans";
     }
 
-    @DeleteMapping("/clients/{id}")
+    @DeleteMapping("/client/{id}")
     public String deleteClient(@PathVariable long id, HttpSession session) {
         return clientService.deleteClient(id, session);
     }

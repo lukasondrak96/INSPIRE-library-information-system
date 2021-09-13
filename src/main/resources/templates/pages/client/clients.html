@@ -76,13 +76,13 @@
                         </div>
 
                         <div class="grid-cell client-loans-area">
-                            <form th:action="@{'/clients/' + ${client.getId} + '/loans/'}" th:method="get">
-                                <button type="submit">Zobrazit vypůjčky</button>
+                            <form th:action="@{'/client/' + ${client.getId} + '/loans/'}" th:method="get">
+                                <button type="submit">Zobrazit výpůjčky</button>
                             </form>
                         </div>
 
                         <div class="grid-cell client-delete-area">
-                            <form th:action="@{'/clients/' + ${client.getId}}" th:method="delete">
+                            <form th:action="@{'/client/' + ${client.getId}}" th:method="delete">
                                 <button type="submit">Smazat uživatele</button>
                             </form>
                         </div>

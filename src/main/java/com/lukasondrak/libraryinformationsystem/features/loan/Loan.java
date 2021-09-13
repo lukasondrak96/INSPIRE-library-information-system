@@ -8,7 +8,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,10 +28,9 @@ public class Loan {
     private Long idLoan;
 
     @Enumerated(EnumType.STRING)
-    @Size(max = 255, message = "Příliš dlouhý vstup")
     private LoanState state;
 
-    @NotNull(message = "Chybějící čas začátku vypůjčky")
+    @NotNull(message = "Chybějící čas začátku výpůjčky")
     private LocalDate startDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -46,19 +44,19 @@ public class Loan {
 
     public String translateState(LoanState state) {
         switch (state) {
-            case ONGOING:
-                return "Probíhající";
-            case RETURNED_IN_DUE_TIME:
+            case NOT_YET_RETURNED:
+                return "Půjčeno";
+            case RETURNED_ON_TIME:
                 return "Vráceno včas";
-            case NOT_RETURNED_IN_DUE_TIME:
-                return "Nevráceno včas";
+            case RETURNED_LATE:
+                return "Vráceno po termínu";
             default:
                 return "Neznámý stav";
         }
     }
 
-    public String dateToString(LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    public String dateToEuropeanTimeFormat(LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern("dd. MM. yyyy"));
     }
 
 }

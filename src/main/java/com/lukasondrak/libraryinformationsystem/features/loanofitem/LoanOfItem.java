@@ -7,7 +7,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -24,13 +23,12 @@ public class LoanOfItem {
     private Long idLoanOfItem;
 
     @Enumerated(EnumType.STRING)
-    @Size(max = 255, message = "Příliš dlouhý vstup")
     private LoanState state;
 
-    @NotNull(message = "Chybějící čas konce vypůjčky")
+    @NotNull(message = "Chybějící čas konce výpůjčky")
     private LocalDate endDate;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "idLoan")
     private Loan loan;
 

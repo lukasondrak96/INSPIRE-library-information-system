@@ -1,20 +1,18 @@
 package com.lukasondrak.libraryinformationsystem.features.loan;
 
-import com.lukasondrak.libraryinformationsystem.features.loan.Loan;
-
+import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 public interface LoanService {
 
-    Optional<Loan> findById(long loanId);
+    String returnItemOfLoan(long clientId, long loanId, long itemId, HttpSession session);
 
     List<Loan> getAllLoans();
 
 
-    Loan save(Loan loan);
-
     void deleteLoan(Loan loan);
 
     void deleteLoanById(long loanId);
+
+    String extendItemOfLoanByTwoWeeks(long clientId, long loanId, long itemId, HttpSession session);
 }
