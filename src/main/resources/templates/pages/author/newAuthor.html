@@ -5,7 +5,7 @@
       layout:decorate="~{layouts/mainLayout}">
 <head>
     <meta charset="UTF-8"/>
-    <title>Autoři</title>
+    <title>Nový autor</title>
 
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
 </head>
@@ -13,8 +13,10 @@
 <div layout:fragment="page-content">
     <h3>Přidání nového autora</h3>
 
-    <div class="card result-card" th:if="${result}">
-        <div class="card-body" th:text="${result}">
+    <div class="card result-card"
+         th:if="${result}">
+        <div class="card-body"
+             th:text="${result}">
         </div>
     </div>
 
@@ -24,12 +26,21 @@
                 <div class="card-body">
                     <form id="new-author-form"
                           th:action="@{/authors/new}"
-                          th:object="${author}" method="post">
+                          th:object="${author}"
+                          method="post">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Jméno autora</label>
-                                    <input class="form-control" type="text" th:field="*{name}">
+                                    <input class="form-control"
+                                           type="text"
+                                           th:field="*{name}">
+                                    <span
+                                           class="form-error"
+                                           th:if="${#fields.hasErrors('name')}"
+                                           th:errors="*{name}">
+                                        Name Error
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -37,13 +48,22 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Příjmení autora</label>
-                                    <input class="form-control" type="text" th:field="*{surname}">
+                                    <input class="form-control"
+                                           type="text"
+                                           th:field="*{surname}">
+                                    <span class="form-error"
+                                          th:if="${#fields.hasErrors('surname')}"
+                                          th:errors="*{surname}">
+                                        Surname Error
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="submit">Vytvořit autora</button>
+                                <button type="submit">
+                                    Vytvořit autora
+                                </button>
                             </div>
                         </div>
                     </form>

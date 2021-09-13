@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Uživatelé</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <h3>Uživatelé</h3>
+
+    <div class="btn-add">
+        <a th:href="@{'/clients/new/'}">Přidat nového uživatele</a>
+    </div>
+
+    <div class="card result-card" th:if="${result}">
+        <div class="card-body" th:text="${result}">
+        </div>
+    </div>
+
+    <div class="row" th:if="${clients.empty}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    Žádný klient nebyl nalezen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" th:unless="${clients.empty}">
+        <div class="col-md-auto">
+            <div class="card">
+                <div class="card-header grid-container clients-grid-container table-responsive scroll-tgr">
+                    <div class="grid-cell client-id-area">
+                        <span class="text-bold"></span>
+                    </div>
+                    <div class="grid-cell client-name-area">
+                        <span class="text-bold">Jméno</span>
+                    </div>
+                    <div class="grid-cell client-surname-area">
+                        <span class="text-bold">Příjmení</span>
+                    </div>
+                    <div class="grid-cell client-email-area">
+                        <span class="text-bold">Email</span>
+                    </div>
+                    <div class="grid-cell client-loans-area">
+                        <span class="text-bold"></span>
+                    </div>
+                    <div class="grid-cell client-delete-area">
+                        <span class="text-bold"></span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="grid-stripped grid-container clients-grid-container table-responsive scroll-tgr same-height"
+                         th:each="client, index : ${clients}">
+                        <div class="grid-cell client-id-area">
+                            <span class="header-text pull-left" th:text="${index.count}"></span>
+                        </div>
+
+                        <div class="grid-cell client-name-area">
+                            <span class="header-text pull-left" th:text="${client.name}"></span>
+                        </div>
+
+                        <div class="grid-cell client-surname-area">
+                            <span th:text="${client.surname}"></span>
+                        </div>
+
+                        <div class="grid-cell client-email-area">
+                            <span th:text="${client.email}"></span>
+                        </div>
+
+                        <div class="grid-cell client-loans-area">
+                            <form th:action="@{'/clients/' + ${client.getId} + '/loans/'}" th:method="get">
+                                <button type="submit">Zobrazit vypůjčky</button>
+                            </form>
+                        </div>
+
+                        <div class="grid-cell client-delete-area">
+                            <form th:action="@{'/clients/' + ${client.getId}}" th:method="delete">
+                                <button type="submit">Smazat uživatele</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

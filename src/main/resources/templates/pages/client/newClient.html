@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Nový uživatel</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <h3>Přidání nového uživatele</h3>
+
+    <div class="card result-card"
+         th:if="${result}">
+        <div class="card-body"
+             th:text="${result}">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="new-author-form"
+                          th:action="@{/clients/new}"
+                          th:object="${client}"
+                          method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Jméno uživatele</label>
+                                    <input class="form-control"
+                                           type="text"
+                                           th:field="*{name}">
+                                    <span
+                                            class="form-error"
+                                            th:if="${#fields.hasErrors('name')}"
+                                            th:errors="*{name}">
+                                        Name Error
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Příjmení uživatele</label>
+                                    <input class="form-control"
+                                           type="text"
+                                           th:field="*{surname}">
+                                    <span class="form-error"
+                                          th:if="${#fields.hasErrors('surname')}"
+                                          th:errors="*{surname}">
+                                        Surname Error
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Email uživatele</label>
+                                    <input class="form-control"
+                                           type="text"
+                                           th:field="*{email}">
+                                    <span class="form-error"
+                                          th:if="${#fields.hasErrors('email')}"
+                                          th:errors="*{email}">
+                                        Email Error
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit">
+                                    Vytvořit uživatele
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

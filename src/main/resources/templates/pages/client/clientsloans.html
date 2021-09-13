@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Uživatelé</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <h3 th:unless="${client == null}"
+        th:text="'Vypůjčky uživatele ' + ${client.name} + ' ' + ${client.surname}"></h3>
+
+    <div class="card result-card" th:if="${result}">
+        <div class="card-body" th:text="${result}">
+        </div>
+    </div>
+
+    <div class="row" th:if="${client.clientLoans.empty}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    Klient si zatím nic nepůjčil.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" th:unless="${client.clientLoans.empty}">
+        <div class="col-md-7">
+            <div class="card"
+                 th:each="clientLoan : ${client.clientLoans}">
+                <div class="card-body">
+                    <div th:text="'Vypůjčka ze dne ' + ${clientLoan.dateToString(clientLoan.startDate)}">
+                    </div>
+                    <div th:text="'Stav vypůjčky: ' + ${clientLoan.translateState(clientLoan.state)}">
+                    </div>
+                    <form th:unless="${clientLoan.state ==
+                        T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).RETURNED_IN_DUE_TIME}"
+                            th:action="@{'/clients/' + ${client.getIdClient()} + '/loan/' + ${clientLoan.getIdLoan()} + '/return'}"
+                          th:method="post">
+                        <button type="submit">Vrátit všechny položky</button>
+                    </form>
+
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header grid-container loan-items-grid-container table-responsive scroll-tgr">
+                                        <div class="grid-cell loan-items-title-area">
+                                            <span class="text-bold">Název</span>
+                                        </div>
+                                        <div class="grid-cell loan-items-year-area">
+                                            <span class="text-bold">Rok vydání</span>
+                                        </div>
+                                        <div class="grid-cell loan-items-end-date-area">
+                                            <span class="text-bold">Vrátit do</span>
+                                        </div>
+                                        <div class="grid-cell loan-items-return-area">
+                                            <span class="text-bold"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body" th:each="loan : ${clientLoan.itemsOfLoan}">
+                                        <div th:text="${loan.item.getTitle()}"></div>
+<!--                                        <div class="grid-stripped grid-container loan-items-grid-container table-responsive scroll-tgr same-height"-->
+<!--                                             th:each="client, index : ${clients}">-->
+<!--                                            <div class="grid-cell client-id-area">-->
+<!--                                                <span class="header-text pull-left" th:text="${index.count}"></span>-->
+<!--                                            </div>-->
+
+<!--                                            <div class="grid-cell client-name-area">-->
+<!--                                                <span class="header-text pull-left" th:text="${client.name}"></span>-->
+<!--                                            </div>-->
+
+<!--                                            <div class="grid-cell client-surname-area">-->
+<!--                                                <span th:text="${client.surname}"></span>-->
+<!--                                            </div>-->
+
+<!--                                            <div class="grid-cell client-email-area">-->
+<!--                                                <span th:text="${client.email}"></span>-->
+<!--                                            </div>-->
+
+<!--                                            <div class="grid-cell client-loans-area">-->
+<!--                                                <form th:action="@{'/clients/' + ${client.getId} + '/loans/'}" th:method="get">-->
+<!--                                                    <button type="submit">Zobrazit vypůjčky</button>-->
+<!--                                                </form>-->
+<!--                                            </div>-->
+
+<!--                                            <div class="grid-cell client-delete-area">-->
+<!--                                                <form th:action="@{'/clients/' + ${client.getId}}" th:method="delete">-->
+<!--                                                    <button type="submit">Smazat uživatele</button>-->
+<!--                                                </form>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+<!--                        -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

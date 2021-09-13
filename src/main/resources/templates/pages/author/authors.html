@@ -33,9 +33,9 @@
   </div>
 
   <div class="row" th:unless="${authors.empty}">
-    <div class="col-md-7">
+    <div class="col-md-auto">
       <div class="card">
-        <div class="card-header authors-grid-container table-responsive scroll-tgr">
+        <div class="card-header grid-container authors-grid-container table-responsive scroll-tgr">
           <div class="grid-cell author-id-area">
             <span class="text-bold"></span>
           </div>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="card-body">
-          <div class="grid-stripped authors-grid-container table-responsive scroll-tgr same-height"
+          <div class="grid-stripped grid-container authors-grid-container table-responsive scroll-tgr same-height"
                th:each="author, index : ${authors}">
             <div class="grid-cell author-id-area">
               <span class="header-text pull-left" th:text="${index.count}"></span>
@@ -64,12 +64,9 @@
               <span th:text="${author.surname}"></span>
             </div>
             <div class="grid-cell author-delete-area">
-            <form th:action="@{/authors/delete}" th:object="${author}" th:method="delete">
-              <input type="hidden" name="idAuthor" th:value="${author.idAuthor}">
-              <input type="hidden" name="name" th:value="${author.name}">
-              <input type="hidden" name="surname" th:value="${author.surname}">
-              <button type="submit">Smazat autora</button>
-            </form>
+              <form th:action="@{'/authors/' + ${author.getId}}" th:method="delete">
+                <button type="submit">Smazat autora</button>
+              </form>
             </div>
           </div>
         </div>

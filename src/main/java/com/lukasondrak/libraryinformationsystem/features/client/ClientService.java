@@ -1,23 +1,19 @@
 package com.lukasondrak.libraryinformationsystem.features.client;
 
+import com.lukasondrak.libraryinformationsystem.dto.ClientInfoWithoutLoansDto;
+import org.springframework.validation.BindingResult;
+
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Optional;
 
 public interface ClientService {
 
+    String deleteClient(long clientId, HttpSession session);
+
     Optional<Client> findById(long clientId);
 
-    Optional<Client> findByEmail(String email);
+    List<ClientInfoWithoutLoansDto> getAllClientsInfo();
 
-    List<Client> getAllClients();
-
-
-    Client save(Client client);
-
-    void deleteClient(Client client);
-
-    void deleteClientById(long clientId);
-
-    void deleteClientByByEmail(String email);
-
+    String addNewClient(Client newClient, BindingResult result, HttpSession session);
 }

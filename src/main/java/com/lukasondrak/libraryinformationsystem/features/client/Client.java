@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Client implements Serializable {
 
@@ -27,16 +26,16 @@ public class Client implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ClientIdGenerator")
     private Long idClient;
 
-    @NotBlank(message = "Prosím vyplňte vaše jméno")
+    @NotBlank(message = "Prosím vyplňte jméno klienta")
     @Size(max = 255, message = "Příliš dlouhý vstup")
     private String name;
 
 
-    @NotBlank(message = "Prosím vyplňte vaše příjmení")
+    @NotBlank(message = "Prosím vyplňte příjmení klienta")
     @Size(max = 255, message = "Příliš dlouhý vstup")
     private String surname;
 
-    @NotBlank(message = "Prosím vyplňte vaši e-mailovou adresu")
+    @NotBlank(message = "Prosím vyplňte e-mailovou adresu klienta")
     @Email(message = "Zkontrolujte, zda je e-mail ve správném formátu")
     @Size(max = 255, message = "Příliš dlouhý vstup")
     @Column(unique = true)
@@ -44,6 +43,11 @@ public class Client implements Serializable {
 
     @OneToMany(mappedBy = "clientReference", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Loan> clientLoans = new ArrayList<>();;
+    private List<Loan> clientLoans = new ArrayList<>();
 
+    public Client(String name, String surname, String email) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+    }
 }
