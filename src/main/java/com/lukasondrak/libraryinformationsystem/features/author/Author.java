@@ -24,11 +24,11 @@ public class Author implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AuthorIdGenerator")
     private Long idAuthor;
 
-    @NotBlank(message = "Prosím vyplňte vaše jméno")
+    @NotBlank(message = "Prosím vyplňte jméno autora")
     @Size(max = 255, message = "Příliš dlouhý vstup")
     private String name;
 
-    @NotBlank(message = "Prosím vyplňte vaše příjmení")
+    @NotBlank(message = "Prosím vyplňte příjmení autora")
     @Size(max = 255, message = "Příliš dlouhý vstup")
     private String surname;
 

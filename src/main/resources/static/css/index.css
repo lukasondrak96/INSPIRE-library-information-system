@@ -14,7 +14,6 @@
     font-weight: bold;
 }
 
-
 .main-panel>.content {
     padding: 40px 30px;
 }
@@ -23,24 +22,26 @@
     font-weight: bold;
 }
 
-.authors-grid-container {
+.grid-container {
     display: grid;
-    grid-template-rows: auto;
     grid-column-gap: 15px;
     padding: 5px 10px;
     margin: 5px;
+}
+
+.authors-grid-container {
     grid-template-columns: 60px minmax(100px, 7fr) minmax(100px, 7fr) 120px;
     grid-template-areas: 'author-id-area author-name-area author-surname-area author-delete-area';
 }
 
-.authors-grid-container-new {
-    display: grid;
-    grid-template-rows: auto;
-    grid-column-gap: 15px;
-    padding: 8px 10px;
-    margin: 10px;
-    grid-template-columns: minmax(120px, 7fr) minmax(120px, 7fr);
-    grid-template-areas: 'author-name-area author-surname-area';
+.clients-grid-container {
+    grid-template-columns: 60px minmax(100px, 7fr) minmax(100px, 7fr) minmax(130px, 7fr) 150px 150px;
+    grid-template-areas: 'client-id-area client-name-area client-surname-area client-email-area client-loans-area client-delete-area';
+}
+
+.loan-items-grid-container {
+    grid-template-columns: minmax(150px, 7fr) minmax(60px, 7fr) 150px 150px;
+    grid-template-areas: 'loan-items-title-area loan-items-year-area loan-items-end-date-area loan-items-return-area';
 }
 
 
@@ -68,4 +69,8 @@ a, a:link {
 
 .form-group {
     margin-bottom: 20px;
+}
+
+.form-error {
+    color: red;
 }
