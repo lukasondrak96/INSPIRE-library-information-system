@@ -103,16 +103,18 @@ public class ItemServiceImpl implements ItemService {
         String names = author.substring(0, lastSpaceInAuthorsFullName);
         String surname = author.substring(lastSpaceInAuthorsFullName + 1);
         Optional<Author> authorOptional = authorRepository.findByNameAndSurname(names, surname);
-        if (authorNotInDatabase(author, session, names, surname, authorOptional))
-            return "redirect:/items";
-
-        Author foundedAuthor = authorOptional.get();
-        if (foundedItem.getItemAuthors().contains(foundedAuthor)) {
-            LOGGER.error("Author " + author + " is author of item " + foundedItem + " already");
-            session.setAttribute("result", "Autor se jménem " + names + " " + surname + " již je autorem této položky.");
-            return "redirect:/items";
+        if (authorIsInDatabase(authorOptional)) {
+            Author foundedAuthor = authorOptional.get();
+            if (foundedItem.getItemAuthors().contains(foundedAuthor)) {
+                LOGGER.error("Author " + author + " is author of item " + foundedItem + " already");
+                session.setAttribute("result", "Autor se jménem " + names + " " + surname + " již je autorem této položky.");
+                return "redirect:/items";
+            }
+            foundedItem.getItemAuthors().add(foundedAuthor);
+        } else {
+            foundedItem.getItemAuthors().add(new Author(names, surname));
         }
-        foundedItem.getItemAuthors().add(foundedAuthor);
+
         itemRepository.save(foundedItem);
         LOGGER.debug("Author " + author + " was successfully added to item " + foundedItem);
         session.setAttribute("result", "Autor se jménem " + names + " " + surname + " byl úspěšně přiřazen položce " + foundedItem.getTitle() + ".");
@@ -132,10 +134,13 @@ public class ItemServiceImpl implements ItemService {
         String names = author.substring(0, lastSpaceInAuthorsFullName);
         String surname = author.substring(lastSpaceInAuthorsFullName + 1);
         Optional<Author> authorOptional = authorRepository.findByNameAndSurname(names, surname);
-        if (authorNotInDatabase(author, session, names, surname, authorOptional))
-            return "redirect:/items";
+        if (authorIsInDatabase(authorOptional)) {
+            newItem.getItemAuthors().add(authorOptional.get());
+        } else {
+            newItem.getItemAuthors().add(new Author(names, surname));
+        }
 
-        newItem.getItemAuthors().add(authorOptional.get());
+
         itemRepository.save(newItem);
 
         LOGGER.debug("Item was successfully created");
@@ -143,14 +148,14 @@ public class ItemServiceImpl implements ItemService {
         return "redirect:/items";
     }
 
+    @Override
+    public Optional<Item> findById(long itemId) {
+        return itemRepository.findById(itemId);
+    }
 
-    private boolean authorNotInDatabase(String author, HttpSession session, String names, String surname, Optional<Author> authorOptional) {
-        if (authorOptional.isEmpty()) {
-            LOGGER.error("Author " + author + " is not in database");
-            session.setAttribute("result", "Autor se jménem " + names + " " + surname + " nebyl nalezen.");
-            return true;
-        }
-        return false;
+
+    private boolean authorIsInDatabase(Optional<Author> authorOptional) {
+        return authorOptional.isPresent();
     }
 
     private boolean authorFullNameHasNoSpace(String author, HttpSession session, int lastSpaceInAuthorsFullName, String resultMessage) {

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Položky k vypůjčení</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <h3>Volné položky k vypůjčení</h3>
+
+    <div class="card result-card" th:if="${result}">
+        <div class="card-body" th:text="${result}">
+        </div>
+    </div>
+
+    <div class="row" th:if="${items.empty}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    Žádná položka nebyla nalezena.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" th:unless="${items.empty}">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    Položky jsou půjčovány na dva týdny. V přehledu výpůjček uživatelů se dá doba prodloužit.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" th:unless="${items.empty}">
+        <div class="col-md-auto">
+            <div class="card">
+                <div class="card-header grid-container items-to-borrow-grid-container table-responsive scroll-tgr">
+                    <div class="grid-cell item-id-area">
+                        <span class="text-bold"></span>
+                    </div>
+                    <div class="grid-cell item-title-area">
+                        <span class="text-bold">Název</span>
+                    </div>
+                    <div class="grid-cell item-year-area">
+                        <span class="text-bold">Rok vytvoření</span>
+                    </div>
+                    <div class="grid-cell item-type-area">
+                        <span class="text-bold">Typ položky</span>
+                    </div>
+                    <div class="grid-cell item-authors-area">
+                        <span class="text-bold">Autoři</span>
+                    </div>
+                    <div class="grid-cell item-borrow-author">
+                        <span class="text-bold">Vybrat k půjčení</span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <form id="new-item-form"
+                          th:action="@{/client/{idClient}/loans/newLoan(idClient=${client.idClient})}"
+                          method="post">
+                        <div class="grid-stripped grid-container items-to-borrow-grid-container table-responsive scroll-tgr same-height"
+                             th:each="item, index : ${items}">
+                            <div class="grid-cell item-id-area">
+                                <span class="header-text pull-left" th:text="${index.count}"></span>
+                            </div>
+
+                            <div class="grid-cell item-title-area">
+                                <span class="header-text pull-left" th:text="${item.title}"></span>
+                            </div>
+
+                            <div class="grid-cell item-year-area">
+                                <span th:text="${item.yearOfPublication}"></span>
+                            </div>
+
+                            <div class="grid-cell item-type-area">
+                                <span th:text="${item.type.getNameInCzech()}"></span>
+                            </div>
+
+                            <div class="grid-cell item-type-area">
+                                <th:block th:each="author, index : ${item.itemAuthors}">
+                                <span th:unless="${index.index != index.size - 1}"
+                                      th:text="${author.name}  + ' ' + ${author.surname}">
+                                </span>
+                                    <span th:if="${index.index != index.size - 1}"
+                                          th:text="${author.name}  + ' ' + ${author.surname} + ', '">
+                                </span>
+                                </th:block>
+
+                            </div>
+
+                            <div class="grid-cell item-borrow-author">
+                                <input type="checkbox" name="itemIdsToBorrow" th:value="${item.idItem}"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit">
+                                    Vytvořit výpůjčku
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

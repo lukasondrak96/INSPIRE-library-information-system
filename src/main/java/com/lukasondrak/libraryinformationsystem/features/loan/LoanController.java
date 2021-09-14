@@ -4,11 +4,9 @@ package com.lukasondrak.libraryinformationsystem.features.loan;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 @Controller
 @AllArgsConstructor
@@ -54,10 +52,10 @@ public class LoanController {
         return loanService.deleteLoanOfClient(loanId, clientId, session);
     }
 
-    @PostMapping("client/{clientId}/loans/new")
-    public String addNewLoanToClient(@Valid @ModelAttribute Loan newLoan, BindingResult result, @PathVariable long clientId,
+    @PostMapping("client/{clientId}/loans/newLoan")
+    public String addNewLoanToClient( @RequestParam(value = "itemIdsToBorrow" , required = false) long[] itemIdsToBorrow , @PathVariable long clientId,
                                      HttpSession session) {
-        return loanService.addNewLoanToClient(newLoan, result, clientId, session);
+        return loanService.addNewLoanToClient(itemIdsToBorrow, clientId, session);
     }
 
 

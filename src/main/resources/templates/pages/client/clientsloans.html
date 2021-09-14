@@ -74,7 +74,7 @@
                                         <span class="text-bold">Rok vydání</span>
                                     </div>
                                     <div class="grid-cell loan-items-end-date-area">
-                                        <span class="text-bold">Vrátit do</span>
+                                        <span class="text-bold">Vrátit do/Vráceno</span>
                                     </div>
                                     <div class="grid-cell loan-items-return-area">
                                         <span class="text-bold"></span>
@@ -132,7 +132,7 @@
                                         <div class="grid-cell loan-items-remove-area">
                                             <form th:action="@{/client/{idClient}/loan/{idLoan}/item/{idItem}/(idClient=${client.idClient},idLoan=${clientLoan.idLoan},idItem=${itemOfLoan.item.idItem})}"
                                                   th:method="delete">
-                                                <button type="submit">Odebrat položku z výpůjčky</button>
+                                                <button type="submit">Smazat položku z výpůjčky</button>
                                             </form>
                                         </div>
                                     </div>

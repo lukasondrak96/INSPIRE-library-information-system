@@ -5,6 +5,7 @@ import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemService {
 
@@ -17,4 +18,6 @@ public interface ItemService {
     String addAuthorToItem(long idItem, String author, HttpSession session);
 
     String addNewItem(Item newItem, BindingResult result, String author, HttpSession session);
+
+    Optional<Item> findById(long itemId);
 }

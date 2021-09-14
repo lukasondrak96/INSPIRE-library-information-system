@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
@@ -27,6 +26,7 @@ import static com.lukasondrak.libraryinformationsystem.common.HttpSessionManipul
 public class LoanServiceImpl implements LoanService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(LoanServiceImpl.class);
+    public static final int DURATION_OF_THE_LOAN = 14;
 
     private LoanRepository loanRepository;
     private LoanOfItemRepository loanOfItemRepository;
@@ -100,26 +100,33 @@ public class LoanServiceImpl implements LoanService {
             return "redirect:/clients";
         }
 
+        List<Item> filteredItems =
+                allItemsInDb.stream()
+                        .filter(this::checkIfItemIsFree)
+                        .collect(Collectors.toList());
+        if(filteredItems.isEmpty()) {
+            LOGGER.error("Error while creating item, no free items right now");
+            session.setAttribute("result", "Nelze vytvořit výpůjčka. Žádná položka není nyní volná.");
+            return "redirect:/client/" + clientId + "/loans";
+        }
+
         model.addAttribute("client", clientOptional.get());
-        model.addAttribute("items", allItemsInDb);
+        model.addAttribute("items", filteredItems);
 
         model.addAttribute("result", session.getAttribute("result"));
-        Loan loan = new Loan();
-        loan.setState(LoanState.NOT_YET_RETURNED);
-        loan.setStartDate(LocalDate.now());
-        model.addAttribute("loan", loan);
-
         clearSessionResultAttribute(session);
-        return "pages/loan/newClientsLoan";
+        return "pages/loan/newLoan";
     }
 
-    @Override
-    public String addNewLoanToClient(Loan newLoan, BindingResult result, long clientId, HttpSession session) {
 
 
-
-        session.setAttribute("result", "Výpůjčka byla úspěšně přidána.");
-        return "redirect:/client/" + clientId + "/loans";
+    private boolean checkIfItemIsFree(Item item) {
+        Optional<LoanOfItem> overlapingLoanOfItem =
+                item.getLoansOfItem()
+                        .stream()
+                        .filter(loanOfItem -> loanOfItem.getState() == LoanState.NOT_YET_RETURNED)
+                        .findFirst();
+        return overlapingLoanOfItem.isEmpty();
     }
 
     @Override
@@ -158,6 +165,51 @@ public class LoanServiceImpl implements LoanService {
 
         returnLoanIfAllItemsDeleted(loan, loanOfItem, session);
 
+        return "redirect:/client/" + clientId + "/loans";
+    }
+
+    @Override
+    public String addNewLoanToClient(long[] itemIdsToBorrow, long clientId, HttpSession session) {
+        if (itemIdsToBorrow == null) {
+            session.setAttribute("result", "Nepodařilo se vytvořit výpůjčku, nebyly vybrány žádné položky.");
+            return "redirect:/client/" + clientId + "/loans";
+        }
+
+        Optional<Client> clientOptional = clientService.findById(clientId);
+        if(clientOptional.isEmpty()) {
+            session.setAttribute("result", "Nepodařilo se vytvořit výpůjčku, uživatel neexistuje.");
+            return "redirect:/clients";
+        }
+        
+        Loan loan = new Loan();
+        loan.setState(LoanState.NOT_YET_RETURNED);
+        loan.setStartDate(LocalDate.now());
+        loan.setClientReference(clientOptional.get());
+
+        for (long id: itemIdsToBorrow) {
+            Optional<Item> itemOptional = itemService.findById(id);
+            if(itemOptional.isEmpty()) {
+                session.setAttribute("result", "Nepodařilo se vytvořit výpůjčku, některé položky nejsou v databázi.");
+                return "redirect:/client/" + clientId + "/loans";
+            }
+            Item item = itemOptional.get();
+            if(!checkIfItemIsFree(item)) {
+                session.setAttribute("result", "Nepodařilo se vytvořit výpůjčku, některé položky nejsou volné.");
+                return "redirect:/client/" + clientId + "/loans";
+            }
+
+            LoanOfItem loanOfItem = new LoanOfItem();
+            loanOfItem.setLoan(loan);
+            loanOfItem.setItem(item);
+            loanOfItem.setState(LoanState.NOT_YET_RETURNED);
+            loanOfItem.setEndDate(LocalDate.now().plusDays(DURATION_OF_THE_LOAN));
+
+            loan.getItemsOfLoan().add(loanOfItem);
+        }
+
+        loanRepository.save(loan);
+
+        session.setAttribute("result", "Výpůjčka byla úspěšně přidána.");
         return "redirect:/client/" + clientId + "/loans";
     }
 
@@ -246,6 +298,7 @@ public class LoanServiceImpl implements LoanService {
             stateToSet = LoanState.RETURNED_LATE;
         }
 
+        loanOfItem.setEndDate(LocalDate.now());
         loanOfItem.setState(stateToSet);
         loanOfItemRepository.save(loanOfItem);
     }

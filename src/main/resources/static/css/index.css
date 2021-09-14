@@ -42,6 +42,10 @@
     grid-template-areas: 'item-id-area item-title-area item-year-area item-type-area item-authors-area  item-add-author item-delete-area';
 }
 
+.items-to-borrow-grid-container {
+    grid-template-columns: 60px minmax(100px, 7fr) minmax(100px, 7fr) minmax(130px, 7fr) minmax(130px, 7fr) minmax(80px, 7fr);
+    grid-template-areas: 'item-id-area item-title-area item-year-area item-type-area item-authors-area item-borrow-author';
+}
 
 .grid-cell {
     align-self: center;
@@ -57,12 +61,16 @@ a, a:link {
     display: inline-block;
 }
 
-.btn-add, .count-of-loans, .btn-return, .btn-delete {
+.btn-add, .count-of-loans, .btn-return, .btn-delete, .info-loan, .card {
     margin: 20px 0;
 }
 
 .result-card, .loan-state {
     margin-bottom: 20px;
+}
+
+.result-card {
+    font-weight: bold;
 }
 
 .form-group, .client-loans {
