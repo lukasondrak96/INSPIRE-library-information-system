@@ -3,8 +3,6 @@ package com.lukasondrak.libraryinformationsystem.features.loan;
 import com.lukasondrak.libraryinformationsystem.features.client.Client;
 import com.lukasondrak.libraryinformationsystem.features.loanofitem.LoanOfItem;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -39,7 +37,6 @@ public class Loan {
 
 
     @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<LoanOfItem> itemsOfLoan = new ArrayList<>();
 
     public String translateState(LoanState state) {

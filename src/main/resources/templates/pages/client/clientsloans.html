@@ -31,6 +31,12 @@
         </div>
     </div>
 
+    <form class="btn-add"
+          th:action="@{'/client/' + ${client.idClient} + '/loans/new'}"
+          th:method="get">
+        <button type="submit">Vytvořit novou výpůjčku</button>
+    </form>
+
     <div class="row" th:unless="${client.clientLoans.empty}">
         <div class="col-md-auto">
             <div class="card"
@@ -46,9 +52,15 @@
                     <form class="btn-return"
                           th:if="${clientLoan.state ==
                         T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).NOT_YET_RETURNED}"
-                          th:action="@{'/clients/' + ${client.idClient} + '/loan/' + ${clientLoan.idLoan} + '/return'}"
+                          th:action="@{'/client/' + ${client.idClient} + '/loan/' + ${clientLoan.idLoan} + '/return'}"
                           th:method="get">
                         <button type="submit">Vrátit všechny položky</button>
+                    </form>
+
+                    <form class="btn-delete"
+                          th:action="@{'/client/' + ${client.idClient} + '/loan/'  + ${clientLoan.idLoan}}"
+                          th:method="delete">
+                        <button type="submit">Smazat výpůjčku</button>
                     </form>
 
                     <div class="card">
@@ -104,8 +116,24 @@
                                             </form>
                                         </div>
                                         <div class="grid-cell loan-items-return-area"
-                                             th:unless="${itemOfLoan.state == T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).NOT_YET_RETURNED}">
-                                            <span>Již vráceno</span>
+                                             th:if="${itemOfLoan.state == T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).RETURNED_LATE}">
+                                            <span th:text="'Již vráceno (po uplynutí limitu)'"></span>
+                                        </div>
+                                        <div class="grid-cell loan-items-return-area"
+                                             th:if="${itemOfLoan.state == T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).RETURNED_ON_TIME}">
+                                            <span th:text="'Již vráceno (včas)'"></span>
+                                        </div>
+                                        <div class="grid-cell loan-items-extend-area"
+                                             th:if="${
+                                             itemOfLoan.state == T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).RETURNED_ON_TIME ||
+                                             itemOfLoan.state == T(com.lukasondrak.libraryinformationsystem.features.loan.LoanState).RETURNED_LATE}">
+                                            <span></span>
+                                        </div>
+                                        <div class="grid-cell loan-items-remove-area">
+                                            <form th:action="@{/client/{idClient}/loan/{idLoan}/item/{idItem}/(idClient=${client.idClient},idLoan=${clientLoan.idLoan},idItem=${itemOfLoan.item.idItem})}"
+                                                  th:method="delete">
+                                                <button type="submit">Odebrat položku z výpůjčky</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

@@ -33,8 +33,8 @@
 }
 
 .loan-items-grid-container {
-    grid-template-columns: minmax(150px, 7fr) minmax(60px, 7fr) 150px 150px 180px;
-    grid-template-areas: 'loan-items-title-area loan-items-year-area loan-items-end-date-area loan-items-return-area loan-items-extend-area';
+    grid-template-columns: minmax(50px, 7fr) minmax(30px, 7fr) minmax(60px, 7fr )minmax(50px, 7fr) minmax(100px, 7fr) minmax(100px, 7fr);
+    grid-template-areas: 'loan-items-title-area loan-items-year-area loan-items-end-date-area loan-items-return-area loan-items-extend-area loan-items-remove-area';
 }
 
 
@@ -52,7 +52,7 @@ a, a:link {
     display: inline-block;
 }
 
-.btn-add, .count-of-loans, .btn-return {
+.btn-add, .count-of-loans, .btn-return, .btn-delete {
     margin: 20px 0;
 }
 

@@ -1,13 +1,21 @@
-insert into author(id_author, name, surname) values (1, 'First', 'Author');
-insert into author(id_author, name, surname) values (2, 'Second', 'Author');
-insert into author(id_author, name, surname) values (3, 'Third', 'Author');
+insert into author(id_author, name, surname)
+values (1, 'First', 'Author');
+insert into author(id_author, name, surname)
+values (2, 'Second', 'Author');
+insert into author(id_author, name, surname)
+values (3, 'Third', 'Author');
 
-insert into item(id_item, title, type, year_of_publication) VALUES (1, 'First Book', 'BOOK', 1992);
-insert into item(id_item, title, type, year_of_publication) VALUES (2, 'Second Book', 'BOOK', 1993);
-insert into item(id_item, title, type, year_of_publication) VALUES (3, 'First Magazine', 'MAGAZINE', 2020);
-insert into item(id_item, title, type, year_of_publication) VALUES (4, 'First CD', 'CD', 2002);
+insert into item(id_item, title, type, year_of_publication)
+VALUES (1, 'First Book', 'BOOK', 1992);
+insert into item(id_item, title, type, year_of_publication)
+VALUES (2, 'Second Book', 'BOOK', 1993);
+insert into item(id_item, title, type, year_of_publication)
+VALUES (3, 'First Magazine', 'MAGAZINE', 2020);
+insert into item(id_item, title, type, year_of_publication)
+VALUES (4, 'First CD', 'CD', 2002);
 
-insert into author_item_link(id_item, id_author) VALUES (1,1);
+insert into author_item_link(id_item, id_author)
+VALUES (1, 1);
 insert into author_item_link(id_item, id_author)
 VALUES (2, 1);
 insert into author_item_link(id_item, id_author)
