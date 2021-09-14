@@ -25,7 +25,7 @@ public class ClientController {
 
     @GetMapping("/clients")
     public String clientsPage(Model model, HttpSession session) {
-        model.addAttribute("result", session.getAttribute("result"));
+        model.addAttribute("result",session.getAttribute("result"));
         model.addAttribute("clients", clientService.getAllClientsInfo());
 
         clearSessionResultAttribute(session);

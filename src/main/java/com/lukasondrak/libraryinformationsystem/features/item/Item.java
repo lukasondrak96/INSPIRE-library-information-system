@@ -1,5 +1,6 @@
 package com.lukasondrak.libraryinformationsystem.features.item;
 
+import com.lukasondrak.libraryinformationsystem.common.YearCustomConstraint;
 import com.lukasondrak.libraryinformationsystem.features.author.Author;
 import com.lukasondrak.libraryinformationsystem.features.loanofitem.LoanOfItem;
 import lombok.*;
@@ -29,11 +30,10 @@ public class Item implements Serializable {
     @Size(max = 255, message = "Příliš dlouhý vstup")
     private String title;
 
+    @YearCustomConstraint(message = "Nesprávný rok publikování")
     private int yearOfPublication;
 
     @Enumerated(EnumType.STRING)
-    @NotBlank(message = "Prosím vyplňte typ položky")
-    @Size(max = 255, message = "Příliš dlouhý vstup")
     private ItemType type;
 
     @OneToMany(mappedBy = "item", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true)

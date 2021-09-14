@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Nová položka</title>
+
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+<div layout:fragment="page-content">
+    <h3>Přidání nové položky</h3>
+
+    <div class="card result-card"
+         th:if="${result}">
+        <div class="card-body"
+             th:text="${result}">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="new-item-form"
+                          th:action="@{/items/newItem}"
+                          th:object="${item}"
+                          method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Název položky</label>
+                                    <input class="form-control"
+                                           type="text"
+                                           th:field="*{title}">
+                                    <span
+                                            class="form-error"
+                                            th:if="${#fields.hasErrors('title')}"
+                                            th:errors="*{title}">
+                                        Name Error
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Rok vytvoření</label>
+                                    <input class="form-control"
+                                           type="number"
+                                           step="1"
+                                           th:field="*{yearOfPublication}">
+                                    <span class="form-error"
+                                          th:if="${#fields.hasErrors('yearOfPublication')}"
+                                          th:errors="*{yearOfPublication}">
+                                        Year Error
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Typ položky</label>
+                                    <select th:field="*{type}">
+                                        <option
+                                                th:each="typeOption :
+                                         ${T(com.lukasondrak.libraryinformationsystem.features.item.ItemType).values()}"
+                                                th:value="${typeOption}"
+                                                th:text="${typeOption.getNameInCzech()}">
+                                        </option>
+                                    </select>
+                                    <span class="form-error"
+                                          th:if="${#fields.hasErrors('type')}"
+                                          th:errors="*{type}">
+                                        Type Error
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="author">Napište jméno a příjmení autora nebo vyberte z listu</label>
+                                    <input list="authors" name="author" id="author">
+                                    <datalist id="authors">
+                                        <th:block th:each="author: ${authors}">
+                                            <option th:value="${author}">
+                                        </th:block>
+                                    </datalist>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit">
+                                    Vytvořit položku
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

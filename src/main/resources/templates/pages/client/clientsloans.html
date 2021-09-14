@@ -47,7 +47,7 @@
                     <div th:text="'Počet položek: ' + ${#lists.size(clientLoan.itemsOfLoan)}">
                     </div>
                     <div class="loan-state"
-                         th:text="'Stav výpůjčky: ' + ${clientLoan.translateState(clientLoan.state)}">
+                         th:text="'Stav výpůjčky: ' + ${clientLoan.state.toString()}">
                     </div>
                     <form class="btn-return"
                           th:if="${clientLoan.state ==

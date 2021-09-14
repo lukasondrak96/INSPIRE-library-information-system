@@ -1,20 +1,20 @@
 package com.lukasondrak.libraryinformationsystem.features.item;
 
-import com.lukasondrak.libraryinformationsystem.features.item.Item;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 
 public interface ItemService {
 
-    Optional<Item> findById(long itemId);
+    String deleteItem(long itemId, HttpSession session);
 
     List<Item> getAllItems();
 
+    String prepareAddAuthorToItemPage(long idItem, Model model, HttpSession session);
 
-    Item save(Item item);
+    String addAuthorToItem(long idItem, String author, HttpSession session);
 
-    void deleteItem(Item item);
-
-    void deleteItemById(long itemId);
+    String addNewItem(Item newItem, BindingResult result, String author, HttpSession session);
 }

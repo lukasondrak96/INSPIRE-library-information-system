@@ -48,6 +48,7 @@ public class LoanController {
     }
 
 
+
     @DeleteMapping("client/{clientId}/loan/{loanId}")
     public String deleteLoanOfClient(@PathVariable long clientId, @PathVariable long loanId, HttpSession session) {
         return loanService.deleteLoanOfClient(loanId, clientId, session);

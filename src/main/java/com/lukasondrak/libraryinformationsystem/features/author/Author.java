@@ -32,11 +32,16 @@ public class Author implements Serializable {
     @Size(max = 255, message = "Příliš dlouhý vstup")
     private String surname;
 
-    @ManyToMany(mappedBy = "itemAuthors", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "itemAuthors", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private List<Item> authorItems = new ArrayList<>();
 
     public Author(String name, String surname) {
         this.name = name;
         this.surname = surname;
+    }
+
+    @Override
+    public String toString() {
+        return name + ' ' + surname;
     }
 }

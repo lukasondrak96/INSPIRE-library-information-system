@@ -6,7 +6,6 @@ import org.springframework.validation.BindingResult;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 public interface AuthorService {
 
@@ -14,6 +13,7 @@ public interface AuthorService {
 
     String addNewAuthor(Author newAuthor, BindingResult result, HttpSession session);
 
+    @Transactional
     String deleteAuthor(long id, HttpSession session);
 }
 

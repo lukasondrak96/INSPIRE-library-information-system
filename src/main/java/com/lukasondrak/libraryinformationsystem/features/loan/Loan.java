@@ -5,6 +5,7 @@ import com.lukasondrak.libraryinformationsystem.features.loanofitem.LoanOfItem;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,22 +36,9 @@ public class Loan {
     @JoinColumn(name = "idClient", referencedColumnName = "idClient")
     private Client clientReference;
 
-
+    @NotEmpty(message = "Nelze vytvořit výpůjčku bez položek")
     @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LoanOfItem> itemsOfLoan = new ArrayList<>();
-
-    public String translateState(LoanState state) {
-        switch (state) {
-            case NOT_YET_RETURNED:
-                return "Půjčeno";
-            case RETURNED_ON_TIME:
-                return "Vráceno včas";
-            case RETURNED_LATE:
-                return "Vráceno po termínu";
-            default:
-                return "Neznámý stav";
-        }
-    }
 
     public String dateToEuropeanTimeFormat(LocalDate date) {
         return date.format(DateTimeFormatter.ofPattern("dd. MM. yyyy"));

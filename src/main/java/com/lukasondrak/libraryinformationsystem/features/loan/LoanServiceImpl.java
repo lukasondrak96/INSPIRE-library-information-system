@@ -7,6 +7,8 @@ import com.lukasondrak.libraryinformationsystem.features.item.ItemService;
 import com.lukasondrak.libraryinformationsystem.features.loanofitem.LoanOfItem;
 import com.lukasondrak.libraryinformationsystem.features.loanofitem.LoanOfItemRepository;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +25,8 @@ import static com.lukasondrak.libraryinformationsystem.common.HttpSessionManipul
 @Service
 @AllArgsConstructor
 public class LoanServiceImpl implements LoanService {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(LoanServiceImpl.class);
 
     private LoanRepository loanRepository;
     private LoanOfItemRepository loanOfItemRepository;
@@ -111,13 +115,18 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public String addNewLoanToClient(Loan newLoan, BindingResult result, long clientId, HttpSession session) {
-        return null;
+
+
+
+        session.setAttribute("result", "Výpůjčka byla úspěšně přidána.");
+        return "redirect:/client/" + clientId + "/loans";
     }
 
     @Override
     public String deleteItemOfLoanOfClient(long clientId, long loanId, long itemId, HttpSession session) {
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
         if (loanOptional.isEmpty()) {
+            LOGGER.error("Error while deleting item, item is not in database");
             session.setAttribute("result", "Nepodařilo se odstanit položku, nejspíše již byla odstaněna.");
             return "redirect:/client/" + clientId + "/loans";
         }
@@ -130,9 +139,11 @@ public class LoanServiceImpl implements LoanService {
                                 itemOfLoan -> itemOfLoan.getItem().getIdItem() == itemId)
                         .collect(Collectors.toList());
         if (loansWithThisItem.size() > 1) {
+            LOGGER.error("Error while deleting item, item is not in database");
             session.setAttribute("result", "Nepodařilo se odstanit položku, nejspíše již byla odstaněna.");
             return "redirect:/client/" + clientId + "/loans";
         } else if (loansWithThisItem.size() == 0) {
+            LOGGER.error("Error while deleting item, item is not in database");
             session.setAttribute("result", "Nepodařilo se odstanit položku, nenachází se v této výpůjčce.");
             return "redirect:/client/" + clientId + "/loans";
         }
@@ -141,6 +152,8 @@ public class LoanServiceImpl implements LoanService {
         LoanOfItem loanOfItem = loansWithThisItem.get(0);
         loan.getItemsOfLoan().remove(loanOfItem);
         loanRepository.save(loan);
+        LOGGER.debug("Item " + loanOfItem.getItem().getTitle() + " successfully deleted of loan with id " + loanOfItem.getLoan().getIdLoan());
+
         session.setAttribute("result", "Položka " + loanOfItem.getItem().getTitle() + " byla odstraněna.");
 
         returnLoanIfAllItemsDeleted(loan, loanOfItem, session);
