@@ -11,6 +11,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Getter
@@ -46,4 +47,17 @@ public class Item implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "id_author")}
     )
     private List<Author> itemAuthors = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Item item = (Item) o;
+        return yearOfPublication == item.yearOfPublication && Objects.equals(idItem, item.idItem) && Objects.equals(title, item.title) && type == item.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idItem, title, yearOfPublication, type);
+    }
 }

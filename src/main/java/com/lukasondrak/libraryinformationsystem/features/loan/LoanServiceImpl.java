@@ -38,6 +38,7 @@ public class LoanServiceImpl implements LoanService {
     public String extendItemOfLoanByTwoWeeks(long clientId, long loanId, long itemId, HttpSession session) {
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
         if (loanOptional.isEmpty()) {
+            LOGGER.error("Error while extending item in laon, item is not in database");
             session.setAttribute("result", "Nepodařilo se prodloužit položku, nejspíše již byla vrácena.");
             return "redirect:/client/" + clientId + "/loans";
         }
@@ -50,9 +51,11 @@ public class LoanServiceImpl implements LoanService {
                                 itemOfLoan -> itemOfLoan.getItem().getIdItem() == itemId)
                         .collect(Collectors.toList());
         if (loansWithThisItem.size() > 1) {
+            LOGGER.error("Error while extending item in laon, item is not in database");
             session.setAttribute("result", "Nepodařilo se prodloužit položku, nejspíše již byla vrácena.");
             return "redirect:/client/" + clientId + "/loans";
         } else if (loansWithThisItem.size() == 0) {
+            LOGGER.error("Error while extending item in laon, item is not in this loan");
             session.setAttribute("result", "Nepodařilo se prodloužit položku, nenachází se v této výpůjčce.");
             return "redirect:/client/" + clientId + "/loans";
         }
@@ -60,6 +63,7 @@ public class LoanServiceImpl implements LoanService {
         LoanOfItem loanOfItem = loansWithThisItem.get(0);
         extendLoanOfItem(loanOfItem);
 
+        LOGGER.debug("Item was successfully extended");
         session.setAttribute("result", "Položka " + loanOfItem.getItem().getTitle() + " byla prodloužena o dva týdny.");
         return "redirect:/client/" + clientId + "/loans";
     }
@@ -68,6 +72,7 @@ public class LoanServiceImpl implements LoanService {
     public String returnAllItemsOfLoan(long clientId, long loanId, HttpSession session) {
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
         if (loanOptional.isEmpty()) {
+            LOGGER.error("Error while returning items of laon, loan is not in database");
             session.setAttribute("result", "Nepodařilo se vrátit položky vypůjčky, nejspíše již byla celá vrácena.");
             return "redirect:/client/" + clientId + "/loans";
         }
@@ -155,7 +160,6 @@ public class LoanServiceImpl implements LoanService {
             return "redirect:/client/" + clientId + "/loans";
         }
 
-
         LoanOfItem loanOfItem = loansWithThisItem.get(0);
         loan.getItemsOfLoan().remove(loanOfItem);
         loanRepository.save(loan);
@@ -163,7 +167,7 @@ public class LoanServiceImpl implements LoanService {
 
         session.setAttribute("result", "Položka " + loanOfItem.getItem().getTitle() + " byla odstraněna.");
 
-        returnLoanIfAllItemsDeleted(loan, loanOfItem, session);
+        deleteLoanIfAllItemsDeleted(loan, loanOfItem, session);
 
         return "redirect:/client/" + clientId + "/loans";
     }
@@ -198,11 +202,7 @@ public class LoanServiceImpl implements LoanService {
                 return "redirect:/client/" + clientId + "/loans";
             }
 
-            LoanOfItem loanOfItem = new LoanOfItem();
-            loanOfItem.setLoan(loan);
-            loanOfItem.setItem(item);
-            loanOfItem.setState(LoanState.NOT_YET_RETURNED);
-            loanOfItem.setEndDate(LocalDate.now().plusDays(DURATION_OF_THE_LOAN));
+            LoanOfItem loanOfItem = createLoanOfItem(loan, item);
 
             loan.getItemsOfLoan().add(loanOfItem);
         }
@@ -273,7 +273,17 @@ public class LoanServiceImpl implements LoanService {
                 loan.setState(LoanState.RETURNED_ON_TIME);
             }
             loanRepository.save(loan);
+            LOGGER.error("Loan was successfully saved");
         }
+    }
+
+    private LoanOfItem createLoanOfItem(Loan loan, Item item) {
+        LoanOfItem loanOfItem = new LoanOfItem();
+        loanOfItem.setLoan(loan);
+        loanOfItem.setItem(item);
+        loanOfItem.setState(LoanState.NOT_YET_RETURNED);
+        loanOfItem.setEndDate(LocalDate.now().plusDays(DURATION_OF_THE_LOAN));
+        return loanOfItem;
     }
 
     private Optional<LoanOfItem> getLoanOfItemWithState(Loan loan, LoanState state) {
@@ -301,16 +311,20 @@ public class LoanServiceImpl implements LoanService {
         loanOfItem.setEndDate(LocalDate.now());
         loanOfItem.setState(stateToSet);
         loanOfItemRepository.save(loanOfItem);
+        LOGGER.debug("Loan of item was successfully returned");
+
     }
 
     private void extendLoanOfItem(LoanOfItem loanOfItem) {
-        loanOfItem.setEndDate(loanOfItem.getEndDate().plusDays(14));
+        loanOfItem.setEndDate(loanOfItem.getEndDate().plusDays(DURATION_OF_THE_LOAN));
         loanOfItemRepository.save(loanOfItem);
+        LOGGER.debug("Loan of item was successfully extended");
     }
 
-    private void returnLoanIfAllItemsDeleted(Loan loan, LoanOfItem loanOfItem, HttpSession session) {
+    private void deleteLoanIfAllItemsDeleted(Loan loan, LoanOfItem loanOfItem, HttpSession session) {
         if (loan.getItemsOfLoan().isEmpty()) {
             loanRepository.delete(loan);
+            LOGGER.debug("Loan was successfully returned");
             session.setAttribute("result",
                     "Položka " +
                             loanOfItem.getItem().getTitle() + " byla odstraněna. " +

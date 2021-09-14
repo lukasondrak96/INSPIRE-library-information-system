@@ -42,7 +42,7 @@ public class AuthorServiceImpl implements AuthorService {
             return "redirect:/authors/new";
         }
 
-        Author savedAuthor = save(new Author(newAuthor.getName(), newAuthor.getSurname()));
+        authorRepository.save(new Author(newAuthor.getName(), newAuthor.getSurname()));
 
         LOGGER.debug("Author " + newAuthor.getName() + " " + newAuthor.getSurname() + " successfully created");
         session.setAttribute("result", "Autor " + newAuthor.getName() + " " + newAuthor.getSurname() + " byl úspěšně vytvořen.");
@@ -71,11 +71,6 @@ public class AuthorServiceImpl implements AuthorService {
             session.setAttribute("result", "Autor " + deletedAuthor.getName() + " " + deletedAuthor.getSurname() + " byl úspěšně vymazán.");
         }
         return "redirect:/authors";
-    }
-
-
-    private Author save(Author author) {
-        return authorRepository.save(author);
     }
 
     private Optional<Author> getAuthorByNameAndSurname(String name, String surname) {

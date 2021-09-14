@@ -1,3 +1,4 @@
+-- insert into tables
 insert into author(id_author, name, surname) values (1, 'First', 'Author');
 insert into author(id_author, name, surname) values (2, 'Second', 'Author');
 insert into author(id_author, name, surname) values (3, 'Third', 'Author');

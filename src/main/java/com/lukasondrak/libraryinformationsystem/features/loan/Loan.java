@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Getter
@@ -44,4 +45,16 @@ public class Loan {
         return date.format(DateTimeFormatter.ofPattern("dd. MM. yyyy"));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Loan loan = (Loan) o;
+        return Objects.equals(idLoan, loan.idLoan) && state == loan.state && Objects.equals(startDate, loan.startDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idLoan, state, startDate);
+    }
 }
