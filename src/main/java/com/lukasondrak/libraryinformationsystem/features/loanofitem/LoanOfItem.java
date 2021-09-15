@@ -10,6 +10,9 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * One item of loan entity
+ */
 @Entity
 @Getter
 @Setter
@@ -36,6 +39,11 @@ public class LoanOfItem {
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "idItem")
     private Item item;
+
+    public LoanOfItem(LoanState state, LocalDate endDate) {
+        this.state = state;
+        this.endDate = endDate;
+    }
 
     @Override
     public boolean equals(Object o) {

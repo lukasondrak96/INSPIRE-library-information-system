@@ -17,6 +17,12 @@ public class AuthorController {
 
     private AuthorService authorService;
 
+    /**
+     * Returns authors page with set model
+     * @param model model
+     * @param session http session
+     * @return authors page
+     */
     @GetMapping("/authors")
     public String authorsPage(Model model, HttpSession session) {
         model.addAttribute("result",session.getAttribute("result"));
@@ -26,6 +32,12 @@ public class AuthorController {
         return "pages/author/authors";
     }
 
+    /**
+     * Returns add new author page with model
+     * @param model model
+     * @param session http session
+     * @return add new author page
+     */
     @GetMapping("/authors/new")
     public String newAuthorPage(Model model, HttpSession session) {
         model.addAttribute("result",session.getAttribute("result"));
@@ -35,11 +47,24 @@ public class AuthorController {
         return "pages/author/newAuthor";
     }
 
+    /**
+     * Delete author endpoint
+     * @param id author's id
+     * @param session http session
+     * @return author's page
+     */
     @DeleteMapping("/author/{id}")
     public String deleteAuthor(@PathVariable long id, HttpSession session) {
         return authorService.deleteAuthor(id, session);
     }
 
+    /**
+     * Create new author endpoint
+     * @param newAuthor new author info
+     * @param result binding result of form
+     * @param session http session
+     * @return authors page
+     */
     @PostMapping("/authors/new")
     public String addNewAuthor(@Valid @ModelAttribute Author newAuthor, BindingResult result,
                                HttpSession session) {

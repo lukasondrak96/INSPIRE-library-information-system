@@ -20,6 +20,12 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
 
+    /**
+     * Deletes client with id
+     * @param clientId id of client
+     * @param session http session
+     * @return clients page
+     */
     @Override
     public String deleteClient(long clientId, HttpSession session) {
         List<ClientInfoWithoutLoansDto> allClients = getAllClientsInfo();
@@ -38,12 +44,20 @@ public class ClientServiceImpl implements ClientService {
         return "redirect:/clients";
     }
 
-
+    /**
+     * Finds client by id
+     * @param clientId id of client
+     * @return optional client
+     */
     @Override
     public Optional<Client> findById(long clientId) {
         return clientRepository.findById(clientId);
     }
 
+    /**
+     * Returns all clients, without their loans
+     * @return list of all clients info
+     */
     @Override
     public List<ClientInfoWithoutLoansDto> getAllClientsInfo() {
         return clientRepository.findAll()
@@ -52,6 +66,13 @@ public class ClientServiceImpl implements ClientService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Creates new client
+     * @param newClient new client info
+     * @param result binding result of form
+     * @param session http session
+     * @return clients page
+     */
     @Override
     public String addNewClient(Client newClient, BindingResult result, HttpSession session) {
         if(result.hasErrors()) {

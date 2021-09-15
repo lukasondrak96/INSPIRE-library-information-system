@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Item of library entity
+ */
 @Data
 @Getter
 @Setter
@@ -47,6 +50,12 @@ public class Item implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "id_author")}
     )
     private List<Author> itemAuthors = new ArrayList<>();
+
+    public Item(String title, int yearOfPublication, ItemType type) {
+        this.title = title;
+        this.yearOfPublication = yearOfPublication;
+        this.type = type;
+    }
 
     @Override
     public boolean equals(Object o) {

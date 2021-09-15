@@ -33,7 +33,14 @@ public class LoanServiceImpl implements LoanService {
     private ItemService itemService;
     private ClientService clientService;
 
-
+    /**
+     * Extends end date of item of loan by two weeks (14 days)
+     * @param clientId id of client
+     * @param loanId id of loan
+     * @param itemId od of item
+     * @param session http session
+     * @return loans of client page
+     */
     @Override
     public String extendItemOfLoanByTwoWeeks(long clientId, long loanId, long itemId, HttpSession session) {
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
@@ -68,6 +75,13 @@ public class LoanServiceImpl implements LoanService {
         return "redirect:/client/" + clientId + "/loans";
     }
 
+    /**
+     * Returns all items of loan
+     * @param clientId id of client
+     * @param loanId id of loan
+     * @param session http session
+     * @return loans of client page
+     */
     @Override
     public String returnAllItemsOfLoan(long clientId, long loanId, HttpSession session) {
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
@@ -92,6 +106,13 @@ public class LoanServiceImpl implements LoanService {
         return "redirect:/client/" + clientId + "/loans";
     }
 
+    /**
+     * Returns new client's loan page
+     * @param clientId id of client
+     * @param model model
+     * @param session http session
+     * @return new loan of client page
+     */
     @Override
     public String prepareNewClientsLoanPage(long clientId, Model model, HttpSession session) {
         Optional<Client> clientOptional = clientService.findById(clientId);
@@ -123,17 +144,14 @@ public class LoanServiceImpl implements LoanService {
         return "pages/loan/newLoan";
     }
 
-
-
-    private boolean checkIfItemIsFree(Item item) {
-        Optional<LoanOfItem> overlapingLoanOfItem =
-                item.getLoansOfItem()
-                        .stream()
-                        .filter(loanOfItem -> loanOfItem.getState() == LoanState.NOT_YET_RETURNED)
-                        .findFirst();
-        return overlapingLoanOfItem.isEmpty();
-    }
-
+    /**
+     * Deletes item from client's loan
+     * @param clientId id of client
+     * @param loanId id of loan
+     * @param itemId od of item
+     * @param session http session
+     * @return loans of client page
+     */
     @Override
     public String deleteItemOfLoanOfClient(long clientId, long loanId, long itemId, HttpSession session) {
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
@@ -172,6 +190,13 @@ public class LoanServiceImpl implements LoanService {
         return "redirect:/client/" + clientId + "/loans";
     }
 
+    /**
+     * Creates new loan to client
+     * @param itemIdsToBorrow array of item ids to add to loan (not empty)
+     * @param clientId id of client
+     * @param session http session
+     * @return clients loans page
+     */
     @Override
     public String addNewLoanToClient(long[] itemIdsToBorrow, long clientId, HttpSession session) {
         if (itemIdsToBorrow == null) {
@@ -213,6 +238,14 @@ public class LoanServiceImpl implements LoanService {
         return "redirect:/client/" + clientId + "/loans";
     }
 
+    /**
+     * Returns one item of loan
+     * @param clientId id of client
+     * @param loanId id of loan
+     * @param itemId od of item
+     * @param session http session
+     * @return loans of client page
+     */
     @Override
     public String returnItemOfLoan(long clientId, long loanId, long itemId, HttpSession session) {
         Optional<Loan> loanOptional = loanRepository.findById(loanId);
@@ -244,6 +277,13 @@ public class LoanServiceImpl implements LoanService {
         return "redirect:/client/" + clientId + "/loans";
     }
 
+    /**
+     * Deletes client's loan
+     * @param clientId id of client
+     * @param loanId id of loan
+     * @param session http session
+     * @return loans of client page
+     */
     @Override
     public String deleteLoanOfClient(long loanId, long clientId, HttpSession session) {
         List<Loan> allLoans = loanRepository.findAll();
@@ -261,6 +301,15 @@ public class LoanServiceImpl implements LoanService {
                             " byla úspěšně vymazána.");
         }
         return "redirect:/client/" + clientId + "/loans";
+    }
+
+    private boolean checkIfItemIsFree(Item item) {
+        Optional<LoanOfItem> overlapingLoanOfItem =
+                item.getLoansOfItem()
+                        .stream()
+                        .filter(loanOfItem -> loanOfItem.getState() == LoanState.NOT_YET_RETURNED)
+                        .findFirst();
+        return overlapingLoanOfItem.isEmpty();
     }
 
     private void returnLoanIfAllItemsReturned(Loan loan) {

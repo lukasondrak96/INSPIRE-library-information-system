@@ -26,7 +26,12 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final AuthorRepository authorRepository;
 
-
+    /**
+     * Deletes item with id
+     * @param itemId id of item
+     * @param session http session
+     * @return items page
+     */
     @Override
     public String deleteItem(long itemId, HttpSession session) {
         List<Item> allItems = itemRepository.findAll();
@@ -45,11 +50,22 @@ public class ItemServiceImpl implements ItemService {
         return "redirect:/items";
     }
 
+    /**
+     * Returns all items
+     * @return list of all items
+     */
     @Override
     public List<Item> getAllItems() {
         return itemRepository.findAll();
     }
 
+    /**
+     * Returns page for adding author to item
+     * @param idItem id of item
+     * @param model model
+     * @param session http session
+     * @return page for adding author to item
+     */
     @Override
     public String prepareAddAuthorToItemPage(long idItem, Model model, HttpSession session) {
         Optional<Item> itemOptional = itemRepository.findById(idItem);
@@ -85,6 +101,13 @@ public class ItemServiceImpl implements ItemService {
         return "pages/item/addAuthorToItem";
     }
 
+    /**
+     * Adds author to item if its not author of this item yet
+     * @param idItem id of item
+     * @param author author's name(s) and surname
+     * @param session http session
+     * @return items page
+     */
     @Override
     public String addAuthorToItem(long idItem, String author, HttpSession session) {
         Optional<Item> itemOptional = itemRepository.findById(idItem);
@@ -121,6 +144,14 @@ public class ItemServiceImpl implements ItemService {
         return "redirect:/items";
     }
 
+    /**
+     * Creates new item
+     * @param newItem new item info
+     * @param result binding result of form
+     * @param author author's name(s) and surname
+     * @param session http session
+     * @return items page
+     */
     @Override
     public String addNewItem(Item newItem, BindingResult result, String author, HttpSession session) {
         if(result.hasErrors()) {
@@ -148,6 +179,11 @@ public class ItemServiceImpl implements ItemService {
         return "redirect:/items";
     }
 
+    /**
+     * Finds item by id
+     * @param itemId id of item
+     * @return item optional
+     */
     @Override
     public Optional<Item> findById(long itemId) {
         return itemRepository.findById(itemId);

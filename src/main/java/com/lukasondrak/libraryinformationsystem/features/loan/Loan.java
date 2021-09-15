@@ -13,6 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Loan of client entity
+ * it holds info about one loan and its items
+ */
 @Data
 @Getter
 @Setter
@@ -40,6 +44,11 @@ public class Loan {
     @NotEmpty(message = "Nelze vytvořit výpůjčku bez položek")
     @OneToMany(mappedBy = "loan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<LoanOfItem> itemsOfLoan = new ArrayList<>();
+
+    public Loan(LoanState state, LocalDate startDate) {
+        this.state = state;
+        this.startDate = startDate;
+    }
 
     public String dateToEuropeanTimeFormat(LocalDate date) {
         return date.format(DateTimeFormatter.ofPattern("dd. MM. yyyy"));

@@ -21,6 +21,10 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
 
+    /**
+     * Returns all authors, without their items
+     * @return list of all authors info
+     */
     @Override
     public List<AuthorInfoWithoutItemsDto> getAllAuthorsInfo() {
         return authorRepository.findAll()
@@ -29,6 +33,13 @@ public class AuthorServiceImpl implements AuthorService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Creates new author
+     * @param newAuthor new author info
+     * @param result binding result of form
+     * @param session http session
+     * @return authors page
+     */
     @Override
     public String addNewAuthor(Author newAuthor, BindingResult result, HttpSession session) {
         if(result.hasErrors()) {
@@ -49,6 +60,12 @@ public class AuthorServiceImpl implements AuthorService {
         return "redirect:/authors";
     }
 
+    /**
+     * Deletes author with id
+     * @param id id of author
+     * @param session http session
+     * @return authors page
+     */
     @Override
     public String deleteAuthor(long id, HttpSession session) {
         List<AuthorInfoWithoutItemsDto> allAuthors = getAllAuthorsInfo();

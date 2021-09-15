@@ -18,11 +18,23 @@ public class ClientController {
 
     private ClientService clientService;
 
+    /**
+     * Redirects from root to clients
+     * @param model model
+     * @param session http session
+     * @return clients page
+     */
     @GetMapping("/")
     public String homePage(Model model, HttpSession session) {
         return "redirect:/clients";
     }
 
+    /**
+     * Returns clients page with set model
+     * @param model model
+     * @param session http session
+     * @return clients page
+     */
     @GetMapping("/clients")
     public String clientsPage(Model model, HttpSession session) {
         model.addAttribute("result",session.getAttribute("result"));
@@ -32,6 +44,12 @@ public class ClientController {
         return "pages/client/clients";
     }
 
+    /**
+     * Returns add new client page with model
+     * @param model model
+     * @param session http session
+     * @return add new client page
+     */
     @GetMapping("/clients/new")
     public String newClientPage(Model model, HttpSession session) {
         model.addAttribute("result",session.getAttribute("result"));
@@ -41,6 +59,13 @@ public class ClientController {
         return "pages/client/newClient";
     }
 
+    /**
+     * Returns client's loans page
+     * @param id client's id
+     * @param model model
+     * @param session http session
+     * @return
+     */
     @GetMapping("/client/{id}/loans")
     public String clientsLoansPage(@PathVariable long id, Model model, HttpSession session) {
         model.addAttribute("result",session.getAttribute("result"));
@@ -55,11 +80,24 @@ public class ClientController {
         return "pages/client/clientsloans";
     }
 
+    /**
+     * Delete client endpoint
+     * @param id clients id
+     * @param session http session
+     * @return clients page
+     */
     @DeleteMapping("/client/{id}")
     public String deleteClient(@PathVariable long id, HttpSession session) {
         return clientService.deleteClient(id, session);
     }
 
+    /**
+     * Create new client endpoint
+     * @param newClient new client info
+     * @param result binding result of form
+     * @param session http session
+     * @return clients page
+     */
     @PostMapping("/clients/new")
     public String addNewClient(@Valid @ModelAttribute Client newClient, BindingResult result,
                                HttpSession session) {
