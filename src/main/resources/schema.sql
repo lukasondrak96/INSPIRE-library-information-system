@@ -1,5 +1,11 @@
--- create tables
+drop table if exists loan_of_item;
+drop table if exists author_item_link;
+drop table if exists loan;
+drop table if exists item;
+drop table if exists client;
+drop table if exists author;
 
+-- create tables
 create table author
 (
     id_author bigint not null
