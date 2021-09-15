@@ -9,10 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>com.lukasondrak</groupId>
-    <artifactId>library-information-system</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>library-information-system</name>
-    <description>library-information-system</description>
+    <artifactId>library-web-app</artifactId>
+    <version>1.0</version>
+    <name>library-web-app</name>
+    <description>Simple app for one librarian to handle client's loans</description>
     <properties>
         <java.version>11</java.version>
     </properties>
